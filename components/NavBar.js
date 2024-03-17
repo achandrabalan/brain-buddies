@@ -1,5 +1,6 @@
 import React from 'react';
 import Hamburger from 'hamburger-react';
+import Link from 'next/link';
 
 const NavBar = () => {
   const [menuToggled, setMenuToggled] = React.useState(false);
@@ -16,12 +17,16 @@ const NavBar = () => {
         <h1 className=" text-3xl ml-3 font-angkor">Brain Buddies</h1>
       </div>
       <div className="flex">
-        <button className="bg-black hover:bg-[#363636] hover:text-white text-white text-md font-bold border-[1px] border-black  py-1 px-8 rounded-[4px] mr-4">
-          Sign up
-        </button>
-        <button className="bg-white hover:bg-[#363636] hover:text-white text-black text-md font-bold border-[1px] border-black  py-1 px-8 rounded-[4px] mr-4">
-          Log in
-        </button>
+        <Link href="/sign-up">
+          <button className="bg-black hover:bg-[#363636] hover:text-white text-white text-md font-bold border-[1px] border-black  py-1 px-8 rounded-[4px] mr-4">
+            Sign up
+          </button>
+        </Link>
+        <Link href="/login">
+          <button className="bg-white hover:bg-[#363636] hover:text-white text-black text-md font-bold border-[1px] border-black  py-1 px-8 rounded-[4px] mr-4">
+            Log in
+          </button>
+        </Link>
       </div>
     </div>
   );

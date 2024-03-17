@@ -30,7 +30,9 @@ const TypingAnimation = () => {
 
     const timeout = setTimeout(
       () => {
-        setSubIndex((prevSubIndex) => prevSubIndex + (reverse ? -1 : 1));
+        setSubIndex(
+          (prevSubIndex) => prevSubIndex + (reverse ? -prevSubIndex : 1)
+        );
       },
       reverse ? 75 : 100
     ); // Faster typing speed
@@ -39,8 +41,8 @@ const TypingAnimation = () => {
   }, [subIndex, index, reverse]);
 
   return (
-    <div className="flex w-full h-[15vh] justify-center text-center items-end pb-[25px]">
-      <h1 className="w-full font-angkor text-6xl">
+    <div className="flex w-full h-[25vh] justify-center text-center items-end pb-[5vh]">
+      <h1 className="w-full font-angkor text-5xl">
         {`${texts[index].substring(0, subIndex)}`}
         <span>|</span>
       </h1>
