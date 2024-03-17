@@ -20,3 +20,17 @@ body {
 #__next {
   @apply min-h-screen;
 }
+
+@keyframes blink {
+  from,
+  to {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+span {
+  animation: blink 1s step-end infinite;
+}

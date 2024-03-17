@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   mode: 'jit',
   content: [
@@ -6,4 +8,12 @@ module.exports = {
   ],
   darkMode: 'class', // or 'media' or 'class'
   presets: [require('./utils/tailwind-preset')],
+  theme: {
+    extend: {
+      fontFamily: {
+        angkor: ['"Angkor"', ...defaultTheme.fontFamily.sans],
+      },
+    },
+  },
+  plugins: [],
 };
