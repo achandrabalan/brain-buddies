@@ -45,7 +45,11 @@ const NavBar = () => {
           size={27}
           distance="sm"
         />
-        <h1 className=" text-3xl ml-3 font-angkor">Brain Buddies</h1>
+        <Link href="/">
+          <h1 className=" text-3xl ml-3 font-angkor cursor-pointer">
+            Brain Buddies
+          </h1>
+        </Link>
       </div>
       {!signedIn ? (
         <div className="flex">
