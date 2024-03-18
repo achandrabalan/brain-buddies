@@ -2323,7 +2323,7 @@ globby@^11.1.0:
 
 goober@^2.1.10:
   version "2.1.14"
-  resolved "https://registry.yarnpkg.com/goober/-/goober-2.1.14.tgz#4a5c94fc34dc086a8e6035360ae1800005135acd"
+  resolved "https://registry.npmjs.org/goober/-/goober-2.1.14.tgz"
   integrity sha512-4UpC0NdGyAFqLNPnhCT2iHpza2q+RAY3GV85a/mRPdzyPQMsj0KmMMuetdIkzWRbJ+Hgau1EZztq8ImmiMGhsg==
 
 gopd@^1.0.1:
@@ -4780,7 +4780,7 @@ react-dom@^18.0.0:
 
 react-hot-toast@^2.4.1:
   version "2.4.1"
-  resolved "https://registry.yarnpkg.com/react-hot-toast/-/react-hot-toast-2.4.1.tgz#df04295eda8a7b12c4f968e54a61c8d36f4c0994"
+  resolved "https://registry.npmjs.org/react-hot-toast/-/react-hot-toast-2.4.1.tgz"
   integrity sha512-j8z+cQbWIM5LY37pR6uZR6D4LfseplqnuAO4co4u8917hBUvXlEqyP1ZzqVLcqoyUesZZv/ImreoCeHVDpE5pQ==
   dependencies:
     goober "^2.1.10"
@@ -5361,7 +5361,7 @@ sucrase@^3.32.0:
 
 supabase@^1.148.6:
   version "1.148.6"
-  resolved "https://registry.npmjs.org/supabase/-/supabase-1.148.6.tgz"
+  resolved "https://registry.yarnpkg.com/supabase/-/supabase-1.148.6.tgz#54501844eebadb06603de1def2d05d5b4e7368fa"
   integrity sha512-/VXbN0C/r/o1TkHGw4EXYvwtwfsSvRaBd6lWa5HamcC6HdFpbof8VsSglWjiie5ONTg3lwqv06wcOrtdpzz/Bg==
   dependencies:
     bin-links "^4.0.3"
