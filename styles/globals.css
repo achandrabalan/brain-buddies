@@ -31,6 +31,6 @@ body {
   }
 }
 
-span {
+.blink-animation {
   animation: blink 1s step-end infinite;
 }

@@ -5,6 +5,7 @@ const TypingAnimation = () => {
   const texts = [
     'Climb the leaderboard',
     'Ruin friendships',
+    'Assemble your crew',
     'Bragging rights await. ',
     'Track your acheivements',
     'Unseat the reigning champ',
@@ -44,7 +45,7 @@ const TypingAnimation = () => {
     <div className="flex w-full h-[25vh] justify-center text-center items-end pb-[5vh]">
       <h1 className="w-full font-angkor text-5xl">
         {`${texts[index].substring(0, subIndex)}`}
-        <span>|</span>
+        <span className="blink-animation">|</span>
       </h1>
     </div>
   );

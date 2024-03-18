@@ -3,10 +3,13 @@ import Link from 'next/link';
 import { supabase } from '../utils/supabase';
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/router';
+import { BUCKET_URL } from '../utils/constants';
 
 export default function SignUp() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const router = useRouter();
 
   const handleSignUp = async (e) => {
     console.log(e);
@@ -20,6 +23,26 @@ export default function SignUp() {
       return;
     }
     toast.success('Sign up successful');
+    const randomProfilePic =
+      BUCKET_URL +
+      `static/profile_pictures/default-${
+        Math.floor(Math.random() * 4) + 1
+      }.jpg`;
+    const { data: trackData, error: trackError } = await supabase
+      .from('profiles')
+      .insert([
+        {
+          id: data.user.id,
+          created_at: data.user.created_at,
+          email: data.user.email,
+          profile_picture_url: randomProfilePic,
+        },
+      ]);
+    if (trackError) {
+      toast.error(trackError.message);
+      return;
+    }
+    router.push('/');
   };
 
   return (
@@ -48,7 +71,7 @@ export default function SignUp() {
                 autocomplete="email"
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
+                className="block pl-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -78,7 +101,7 @@ export default function SignUp() {
                 autocomplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
+                className="block pl-2  w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -89,7 +112,7 @@ export default function SignUp() {
               onClick={handleSignUp}
               className="flex w-full justify-center rounded-md bg-brain px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brain focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brain"
             >
-              Sign in
+              Sign up
             </button>
           </div>
         </form>

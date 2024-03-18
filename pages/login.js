@@ -3,10 +3,12 @@ import Link from 'next/link';
 import { supabase } from '../utils/supabase';
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 export default function Login() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const router = useRouter();
 
   const handleLogin = async (event) => {
     event.preventDefault(); // Prevent the form from submitting and refreshing the page
@@ -19,6 +21,7 @@ export default function Login() {
       return;
     }
     toast.success('Login successful');
+    router.push('/');
   };
 
   return (
@@ -46,7 +49,7 @@ export default function Login() {
                 type="email"
                 autoComplete="email"
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
+                className="block pl-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -67,7 +70,7 @@ export default function Login() {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
+                className="block pl-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
