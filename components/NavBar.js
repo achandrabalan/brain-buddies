@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Hamburger from 'hamburger-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { supabase } from '../utils/supabase';
 import { toast, Toaster } from 'react-hot-toast';
 
@@ -9,7 +8,7 @@ const NavBar = () => {
   const [menuToggled, setMenuToggled] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [pictureURL, setPictureURL] = useState('');
-  const [isLoading, setIsLoading] = useState(true); // Added loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +32,7 @@ const NavBar = () => {
       setIsLoading(false); // Loading complete
     };
     fetchData();
-  }, []); // Consider dependencies if needed
+  }, []);
 
   return (
     <div className="absolute z-50 flex w-full h-[85px] items-center bg-white justify-between border-b-[1px] border-gray-300">
@@ -65,7 +64,7 @@ const NavBar = () => {
           </Link>
         </div>
       ) : isLoading ? (
-        <div>Loading...</div> // Placeholder or loader
+        <div>Loading...</div>
       ) : (
         <Link href="/profile">
           <img

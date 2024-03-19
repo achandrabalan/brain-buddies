@@ -1,9 +1,7 @@
 export async function uploadFileToSupabase(file, fileName, folder, user) {
-  const filePath = `uploads/${fileName}`;
+  const filePath = `${folder}/${fileName}`;
 
-  let { error } = await supabase.storage
-    .from('your-bucket-name')
-    .upload(filePath, file);
+  let { error } = await supabase.storage.from('static').upload(filePath, file);
 
   if (error) {
     toastError('Failed to upload file.');

@@ -1,11 +1,73 @@
 import React from 'react';
 import NavBar from '../components/NavBar';
+import { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabase';
+import { useRouter } from 'next/router';
+import toast, { Toaster } from 'react-hot-toast';
+import { stringify } from 'postcss';
 
 export default function Profile() {
+  const [userID, setUserID] = useState('');
+  const router = useRouter();
+
+  // fields
+  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [fileName, setFileName] = useState('');
+
+  // get user
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUserID(user.id);
+    };
+    fetchUser();
+  }, []);
+
+  // get existing profile from supabase
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!userID) return;
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userID)
+        .single();
+      if (error) {
+        console.log(error);
+        toast.error(error.message);
+      } else {
+        setUsername(data.username);
+        setFirstName(data.first_name);
+        setLastName(data.last_name);
+      }
+    };
+    fetchProfile();
+  }, [userID]);
+
   const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    console.log(file);
+    setFileName(e.target.files[0].name);
   };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.log(error);
+      toast.error('Error logging out');
+      return;
+    }
+    toast.success('Logged out');
+    router.push('/login');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       <NavBar name={'refactors'} />
@@ -37,9 +99,18 @@ export default function Profile() {
                       autocomplete="username"
                       className="pl-2 block flex-1 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-brain focus:ring-brain focus:border-brain focus:border-3 "
                       placeholder="janesmith"
+                      value={username}
+                      onChange={(e) => {
+                        setUsername(e.target.value);
+                      }}
                     />
                   </div>
                 </div>
+                {true && (
+                  <span className="text-sm text-red-600">
+                    username is taken
+                  </span>
+                )}
               </div>
               <div class="sm:col-span-4">
                 <label
@@ -57,6 +128,7 @@ export default function Profile() {
                       autocomplete="first_name"
                       className="pl-2 block flex-1 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-brain focus:ring-brain focus:border-brain focus:border-3 "
                       placeholder="janesmith"
+                      value={firstName}
                     />
                   </div>
                 </div>
@@ -77,6 +149,7 @@ export default function Profile() {
                       autocomplete="last_name"
                       className="pl-2 block flex-1 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-brain focus:ring-brain focus:border-brain focus:border-3 "
                       placeholder="janesmith"
+                      value={lastName}
                     />
                   </div>
                 </div>
@@ -124,14 +197,38 @@ export default function Profile() {
                     <p class="text-xs leading-5 text-gray-600">
                       PNG, JPG up to 10MB
                     </p>
+                    {fileName && (
+                      <p class="text-xs pt-4 font-bold leading-5 text-gray-600">
+                        {fileName}
+                      </p>
+                    )}
                   </div>
                 </div>
+                {true && (
+                  <span className="text-sm text-red-600">
+                    file size too large
+                  </span>
+                )}
               </div>
             </div>
-
-            <button className="flex w-full mt-10 justify-center rounded-md bg-brain px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brain focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brain">
-              Save
-            </button>
+            <div className="flex gap-x-3">
+              <button
+                onClick={(e) => {
+                  handleSubmit(e);
+                }}
+                className="flex w-full mt-10 justify-center hover:border-brain hover:border-[2px]  hover:bg-white hover:text-brain rounded-md bg-brain px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brain"
+              >
+                Save
+              </button>
+              <button
+                onClick={(e) => {
+                  handleLogout(e);
+                }}
+                className="flex w-full mt-10 justify-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-brain hover:text-white hover:bg-brain shadow-sm focus-visible:outline focus-visible:outline-2 border-[2px] border-brain focus-visible:outline-brain"
+              >
+                Log out
+              </button>
+            </div>
           </div>
         </div>
       </form>
