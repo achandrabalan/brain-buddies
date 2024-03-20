@@ -3,11 +3,12 @@ import NavBar from '../components/NavBar';
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 import { useRouter } from 'next/router';
-import toast, { Toaster } from 'react-hot-toast';
-import { stringify } from 'postcss';
+import toast from 'react-hot-toast';
+import { validFileTypes } from '../utils/constants';
 
 export default function Profile() {
   const [userID, setUserID] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const router = useRouter();
 
   // fields
@@ -16,6 +17,9 @@ export default function Profile() {
   const [lastName, setLastName] = useState('');
   const [fileName, setFileName] = useState('');
 
+  const [fileProps, setFileProps] = useState('');
+  const [errors, setErrors] = useState({});
+
   // get user
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,6 +27,7 @@ export default function Profile() {
         data: { user },
       } = await supabase.auth.getUser();
       setUserID(user.id);
+      setUserEmail(user.email);
     };
     fetchUser();
   }, []);
@@ -49,7 +54,7 @@ export default function Profile() {
   }, [userID]);
 
   const handleFileUpload = (e) => {
-    setFileName(e.target.files[0].name);
+    setFileProps(e.target.files[0]);
   };
 
   const handleLogout = async (e) => {
@@ -64,8 +69,90 @@ export default function Profile() {
     router.push('/login');
   };
 
+  const validateUsername = async (username) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('username', username);
+
+    if (error) {
+      toast.error(error.message);
+      return false;
+    }
+    if (data.length > 0) {
+      if (data[0].id !== userID) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const validateForm = async () => {
+    const duplicateUsername = await validateUsername(username);
+    const invalidFile =
+      fileProps &&
+      (fileProps.size > 3145728 || !validFileTypes.includes(fileProps.type));
+
+    let errors = {};
+    if (!username) {
+      errors.username = 'username is required';
+    } else if (duplicateUsername) {
+      errors.username = 'username is taken';
+    }
+    if (fileProps && fileProps.size > 3145728) {
+      errors.file = 'file size too large';
+    } else if (fileProps && !validFileTypes.includes(fileProps.type)) {
+      errors.file = 'invalid file type';
+    }
+    if (Object.keys(errors).length > 0) {
+      toast.error('Please fix the errors in the form');
+      setErrors(errors);
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    validateForm().then(async (valid) => {
+      if (valid) {
+        const { data, error } = await supabase.from('profiles').upsert({
+          id: userID,
+          username: username,
+          first_name: firstName,
+          last_name: lastName,
+          email: userEmail,
+        });
+        if (error) {
+          console.log(error);
+          toast.error(error.message);
+          return;
+        }
+        if (fileProps) {
+          const filePath = `profile_pictures/${fileProps.name}-${userID}`;
+          let { error } = await supabase.storage
+            .from('static')
+            .upload(filePath, fileProps);
+          if (error) {
+            console.log(error);
+            toast.error('Failed to upload file');
+            return;
+          }
+          const fileUrl = `https://hjeelebymhttxomgqoto.supabase.co/storage/v1/object/public/static/${filePath}`;
+          const { data, error: updateError } = await supabase
+            .from('profiles')
+            .update({ profile_picture_url: fileUrl })
+            .eq('id', userID);
+          if (updateError) {
+            console.log(updateError);
+            toast.error(updateError.message);
+            return;
+          }
+        }
+        toast.success('Profile updated');
+        setErrors({});
+      }
+    });
   };
 
   return (
@@ -75,11 +162,11 @@ export default function Profile() {
 
       <form>
         <div class="flex flex-col space-y-12 items-center justify-center h-screen w-full ">
-          <div class="border-b border-gray-900/10 pb-12">
+          <div class="border-b border-gray-900/10  mt-10">
             <h2 class="text-lg font-bold leading-7 text-gray-900">Profile</h2>
             <p class="mt-1 text-sm leading-6 text-gray-600">
-              This information will be displayed publicly so be careful what you
-              share.
+              This information will be displayed publicly so be careful with
+              what you share.
             </p>
 
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -106,19 +193,22 @@ export default function Profile() {
                     />
                   </div>
                 </div>
-                {true && (
+                {errors.username && (
                   <span className="text-sm text-red-600">
-                    username is taken
+                    {errors.username}
                   </span>
                 )}
               </div>
               <div class="sm:col-span-4">
-                <label
-                  for="first_name"
-                  class="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  First Name
-                </label>
+                <div className="flex items-center justify-between">
+                  <label
+                    for="first_name"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    First Name
+                  </label>
+                  <span className="text-sm font-light "> optional </span>
+                </div>
                 <div class="mt-2">
                   <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300  sm:max-w-md">
                     <input
@@ -128,18 +218,24 @@ export default function Profile() {
                       autocomplete="first_name"
                       className="pl-2 block flex-1 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-brain focus:ring-brain focus:border-brain focus:border-3 "
                       placeholder="janesmith"
+                      onChange={(e) => {
+                        setFirstName(e.target.value);
+                      }}
                       value={firstName}
                     />
                   </div>
                 </div>
               </div>
               <div class="sm:col-span-4">
-                <label
-                  for="last_name"
-                  class="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Last Name
-                </label>
+                <div className="flex items-center justify-between">
+                  <label
+                    for="last_name"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Last Name
+                  </label>
+                  <span className="text-sm font-light "> optional </span>
+                </div>
                 <div class="mt-2">
                   <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300  sm:max-w-md">
                     <input
@@ -150,18 +246,24 @@ export default function Profile() {
                       className="pl-2 block flex-1 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-brain focus:ring-brain focus:border-brain focus:border-3 "
                       placeholder="janesmith"
                       value={lastName}
+                      onChange={(e) => {
+                        setLastName(e.target.value);
+                      }}
                     />
                   </div>
                 </div>
               </div>
 
               <div class="col-span-full">
-                <label
-                  for="cover-photo"
-                  class="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Cover photo
-                </label>
+                <div className="flex items-center justify-between">
+                  <label
+                    for="cover_photo"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Cover Photo
+                  </label>
+                  <span className="text-sm font-light "> optional </span>
+                </div>
                 <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                   <div class="text-center">
                     <svg
@@ -195,19 +297,17 @@ export default function Profile() {
                       <p class="pl-1">or drag and drop</p>
                     </div>
                     <p class="text-xs leading-5 text-gray-600">
-                      PNG, JPG up to 10MB
+                      PNG, JPG, WEBP up to 3MB
                     </p>
-                    {fileName && (
+                    {fileProps && (
                       <p class="text-xs pt-4 font-bold leading-5 text-gray-600">
-                        {fileName}
+                        {fileProps.name}
                       </p>
                     )}
                   </div>
                 </div>
-                {true && (
-                  <span className="text-sm text-red-600">
-                    file size too large
-                  </span>
+                {errors.file && (
+                  <span className="text-sm text-red-600">{errors.file}</span>
                 )}
               </div>
             </div>

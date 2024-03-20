@@ -42,7 +42,7 @@ export default function SignUp() {
       toast.error(trackError.message);
       return;
     }
-    router.push('/');
+    router.push('/profile');
   };
 
   return (
