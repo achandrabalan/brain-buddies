@@ -119,12 +119,12 @@ export default function SignUp() {
 
         <p className="mt-10 text-center text-sm text-gray-500">
           Have an account?
-          <a
+          <Link
             href="/login"
             className="ml-4 font-semibold leading-6 text-brain hover:text-brain"
           >
             Log in
-          </a>
+          </Link>
         </p>
       </div>
     </div>

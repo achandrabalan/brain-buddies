@@ -39,7 +39,7 @@ const TypingAnimation = () => {
     ); // Faster typing speed
 
     return () => clearTimeout(timeout);
-  }, [subIndex, index, reverse]);
+  }, [subIndex, index, reverse, texts]);
 
   return (
     <div className="flex w-full h-[25vh] justify-center text-center items-end pb-[5vh]">

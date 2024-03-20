@@ -32,7 +32,7 @@ const NavBar = () => {
       setIsLoading(false); // Loading complete
     };
     fetchData();
-  }, []);
+  }, [pictureURL]);
 
   return (
     <div className="absolute z-50 flex w-full h-[85px] items-center bg-white justify-between border-b-[1px] border-gray-300">
