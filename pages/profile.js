@@ -134,7 +134,6 @@ export default function Profile() {
             .from('static')
             .upload(filePath, fileProps);
           if (error) {
-            console.log(error);
             toast.error('Failed to upload file');
             return;
           }
@@ -144,13 +143,13 @@ export default function Profile() {
             .update({ profile_picture_url: fileUrl })
             .eq('id', userID);
           if (updateError) {
-            console.log(updateError);
             toast.error(updateError.message);
             return;
           }
         }
         toast.success('Profile updated');
         setErrors({});
+        router.push('/');
       }
     });
   };
@@ -183,9 +182,8 @@ export default function Profile() {
                       type="text"
                       name="username"
                       id="username"
-                      autocomplete="username"
                       className="pl-2 block flex-1 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-brain focus:ring-brain focus:border-brain focus:border-3 "
-                      placeholder="janesmith"
+                      placeholder="janerocks123"
                       value={username}
                       onChange={(e) => {
                         setUsername(e.target.value);
@@ -217,7 +215,7 @@ export default function Profile() {
                       id="first_name"
                       autocomplete="first_name"
                       className="pl-2 block flex-1 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-brain focus:ring-brain focus:border-brain focus:border-3 "
-                      placeholder="janesmith"
+                      placeholder="Jane"
                       onChange={(e) => {
                         setFirstName(e.target.value);
                       }}
@@ -244,7 +242,7 @@ export default function Profile() {
                       id="last_name"
                       autocomplete="last_name"
                       className="pl-2 block flex-1 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-brain focus:ring-brain focus:border-brain focus:border-3 "
-                      placeholder="janesmith"
+                      placeholder="Smith"
                       value={lastName}
                       onChange={(e) => {
                         setLastName(e.target.value);
