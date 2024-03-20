@@ -11,3 +11,5 @@ export async function uploadFileToSupabase(file, fileName, folder, user) {
     console.log('File URL:', fileUrl);
   }
 }
+
+
