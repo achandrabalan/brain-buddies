@@ -10,7 +10,7 @@ export default function SignUp() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const router = useRouter();
-
+  // some change to trigger a new build
   const handleSignUp = async (e) => {
     console.log(e);
     e.preventDefault();
