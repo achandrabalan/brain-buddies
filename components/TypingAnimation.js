@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 const TypingAnimation = () => {
   // Texts to cycle through
-  const texts = [
-    'Climb the leaderboard',
-    'Ruin friendships',
-    'Assemble your crew',
-    'Bragging rights await. ',
-    'Track your acheivements',
-    'Unseat the reigning champ',
-    'Gloat. ',
-  ];
+  const texts = useMemo(
+    () => [
+      'Climb the leaderboard',
+      'Ruin friendships',
+      'Assemble your crew',
+      'Bragging rights await.',
+      'Track your achievements',
+      'Unseat the reigning champ',
+      'Gloat.',
+    ],
+    []
+  ); // Empty dependency array to prevent re-creation of the array
   // State to hold the current text and its index
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
