@@ -71,7 +71,7 @@ export default function SignUp() {
                 autocomplete="email"
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="block pl-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
+                className="focus:outline-none block pl-2 w-full rounded-md border-0 py-1.5 text-gray-900  ring-gray-300 shadow-sm ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain focus:border-brain focus:border-3 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function SignUp() {
                 autocomplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="block pl-2  w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain sm:text-sm sm:leading-6"
+                className="focus:outline-none block pl-2 w-full rounded-md border-0 py-1.5 text-gray-900  ring-gray-300 shadow-sm ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brain focus:border-brain focus:border-3 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function SignUp() {
             <button
               type="submit"
               onClick={handleSignUp}
-              className="flex w-full justify-center rounded-md bg-brain px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brain focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brain"
+              className="flex w-full justify-center rounded-md bg-brain px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brain focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:ring-brain focus:border-brain focus:border-3   focus-visible:outline-brain"
             >
               Sign up
             </button>
@@ -119,11 +119,10 @@ export default function SignUp() {
 
         <p className="mt-10 text-center text-sm text-gray-500">
           Have an account?
-          <Link
-            href="/login"
-            className="ml-4 font-semibold leading-6 text-brain hover:text-brain"
-          >
-            Log in
+          <Link href="/login">
+            <span className="ml-4 font-semibold leading-6 text-brain hover:text-brain">
+              Log in
+            </span>
           </Link>
         </p>
       </div>

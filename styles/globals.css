@@ -34,3 +34,22 @@ body {
 .blink-animation {
   animation: blink 1s step-end infinite;
 }
+
+.side-nav-link {
+  display: block;
+  padding: 5px 10px;
+  margin: 5px 15px;
+  font-size: 16px;
+  color: #333;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.side-nav-link:hover {
+  background-color: #fb539b;
+  font-weight: 800;
+  border-radius: '20px';
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(5px);
+}

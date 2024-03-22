@@ -2,9 +2,7 @@ import React from 'react';
 
 const LandingContent = () => {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-[75vh] bg-brain">
-      hello world{' '}
-    </div>
+    <div className="flex flex-col items-center justify-center w-full h-[75vh] bg-brain"></div>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { canHaveDecorators } from 'typescript';
 
-const TypingAnimation = () => {
+const Hero = () => {
   // Texts to cycle through
   const texts = useMemo(
     () => [
@@ -45,7 +46,7 @@ const TypingAnimation = () => {
   }, [subIndex, index, reverse, texts]);
 
   return (
-    <div className="flex w-full h-[25vh] justify-center text-center items-end pb-[5vh]">
+    <div className="flex w-[65%] h-screen justify-start text-center items-center">
       <h1 className="w-full font-angkor text-5xl">
         {`${texts[index].substring(0, subIndex)}`}
         <span className="blink-animation">|</span>
@@ -54,4 +55,4 @@ const TypingAnimation = () => {
   );
 };
 
-export default TypingAnimation;
+export default Hero;
